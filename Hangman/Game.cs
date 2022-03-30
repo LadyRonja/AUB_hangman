@@ -33,7 +33,7 @@ namespace Hangman
         private bool shouldRun = false;
         private int guessesLeft = MAX_GUESSES;
 
-        private string[] backupWords = {"Missing", "Something", "Within", "Execution", "Folder", "Backup", "Words", "Engaged" };
+        private string[] backupWords = { "Missing", "Something", "Within", "Execution", "Folder", "Backup", "Words", "Engaged" };
         private StringBuilder guessedLetters = new StringBuilder();
         private char[] correctGuesses = new char[0];
         private string currentWord = "";
@@ -50,8 +50,8 @@ namespace Hangman
 
         private void PrepareNewGame()
         {
-            //Get a word to be guessed
-            //if the .txt can't be found use the backup words.
+            // Get a word to be guessed
+            // if the .txt can't be found use the backup words.
             if (File.Exists(wordListPath))
             {
                 string[] lines = File.ReadAllLines(wordListPath);
@@ -64,14 +64,14 @@ namespace Hangman
                 currentWord = backupWords[_rand];
             }
 
-            //Fill the correctGuesses array with underdashes
+            // Fill the correctGuesses array with underdashes
             correctGuesses = new char[currentWord.Length];
-            for (int i = 0; i < correctGuesses.Length; i++)  { correctGuesses[i] = '_'; }
+            for (int i = 0; i < correctGuesses.Length; i++) { correctGuesses[i] = '_'; }
 
-            //Empty previous guesses
+            // Empty previous guesses
             guessedLetters = new StringBuilder();
 
-            //Reset guess count
+            // Reset guess count
             guessesLeft = MAX_GUESSES;
         }
 
@@ -81,15 +81,15 @@ namespace Hangman
 
             while (shouldRun)
             {
-                //If the player is out of guesses, end the game in a loss
-                //Otherwise let them take another guess
+                // If the player is out of guesses, end the game in a loss
+                // Otherwise let them take another guess
                 if (guessesLeft == 0)
                 {
-                    EndGame(false); 
+                    EndGame(false);
                 }
-                else 
-                { 
-                    TakeGuess(); 
+                else
+                {
+                    TakeGuess();
                 }
             }
         }
@@ -99,20 +99,20 @@ namespace Hangman
             Console.Clear();
             //Console.WriteLine(currentWord); //Debug
 
-            //Print the ASCII art
-            AsciiDrawer.DrawHangmanedProgress(MAX_GUESSES-guessesLeft);
-            
-            //Print the correctly guessed letters
+            // Print the ASCII art
+            AsciiDrawer.DrawHangmanedProgress(MAX_GUESSES - guessesLeft);
+
+            // Print the correctly guessed letters
             for (int i = 0; i < correctGuesses.Length; i++)
             {
                 Console.Write(correctGuesses[i] + " ");
             }
             Console.WriteLine();
-           
-            //Print amount of guesses left
+
+            // Print amount of guesses left
             Console.WriteLine($"You have {guessesLeft} guesses left.");
 
-            //Print already guessed letters
+            // Print already guessed letters
             Console.Write("You know the word doesn't contain these letters: ");
             for (int i = 0; i < guessedLetters.Length; i++)
             {
@@ -126,10 +126,10 @@ namespace Hangman
             Console.WriteLine("Please enter a guess, a single letter or the full word");
             string userInput = "";
 
-            //Keep taking input until user enters a legal guess
-            while (LegalGuess(Console.ReadLine(), out userInput) == false) 
+            // Keep taking input until user enters a legal guess
+            while (LegalGuess(Console.ReadLine(), out userInput) == false)
             {
-                //User keeps guessing
+                // User keeps guessing
             }
 
             HandleGuess(userInput);
@@ -145,7 +145,7 @@ namespace Hangman
         {
             bool noErrorFound = true;
 
-            //Does input only consist of letters?
+            // Does input only consist of letters?
             for (int i = 0; i < input.Length; i++)
             {
                 if (Char.IsLetter(input[i]) == false)
@@ -156,16 +156,16 @@ namespace Hangman
 
                     noErrorFound = false;
                     break;
-                    
+
                 }
             }
 
-            //Is input either length 1 or the length of the current word?
+            // Is input either length 1 or the length of the current word?
             if (input.Length != 1)
             {
                 if (input.Length != currentWord.Length)
                 {
-                    
+
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Guess must be either one letter or of equal length to the word");
                     Console.ResetColor();
@@ -174,7 +174,7 @@ namespace Hangman
                 }
             }
 
-            //Has a single letter already been guessed
+            // Has a single letter already been guessed
             if (input.Length == 1)
             {
                 if (guessedLetters.ToString().Contains(input[0]) || correctGuesses.Contains(input[0]))
@@ -185,14 +185,11 @@ namespace Hangman
 
                     noErrorFound = false;
                 }
-
             }
-
-
 
             validOutput = (noErrorFound) ? input : "L";
 
-            //Debug close program
+            // Debug close program
             if (input == "-1")
             {
                 shouldRun = false;
@@ -204,21 +201,21 @@ namespace Hangman
 
         private void HandleGuess(string guess)
         {
-            //Guesses are not case sensitive
+            // Guesses are not case sensitive
             guess = guess.ToLower();
             char charGuess = guess[0];
 
-            //Check full guesses
+            // Check full guesses
             if (guess.Length != 1)
             {
-                if (Equals(guess, currentWord)) //Correctly guessed the word
-                {
-                    //End the game in the players win
+                if (Equals(guess, currentWord))// Correctly guessed the word
+                { 
+                    // End the game in the players win
                     EndGame(true);
                 }
                 else
                 {
-                    //Subtract a guess, inform the player that they were close
+                    // Subtract a guess, inform the player that they were close
                     guessesLeft--;
 
                     PrintGameState();
@@ -227,16 +224,16 @@ namespace Hangman
                     Console.ResetColor();
                 }
 
-                return; //If it's a full word then don't check single letter guesses
+                return; // If it's a full word then don't check single letter guesses
             }
 
-            //Check single char guess
+            // Check single char guess
 
 
-            //is the letter a correct guess?
+            // is the letter a correct guess?
             if (currentWord.Contains(charGuess))
             {
-                //upate the char array that dispalys the correct guesses in all places the guess matches
+                // upate the char array that dispalys the correct guesses in all places the guess matches
                 for (int i = 0; i < currentWord.Length; i++)
                 {
                     if (currentWord[i] == charGuess)
@@ -247,7 +244,7 @@ namespace Hangman
 
             }
             else // if the guess is incorrect, remove a guess and add it to the list
-            {
+            { 
                 guessedLetters.Append(charGuess);
                 guessesLeft--;
             }
@@ -256,9 +253,9 @@ namespace Hangman
 
         private void EndGame(bool playerWon)
         {
-            //If the palyer won, fill out the correct guesses fully and congratulate the player
-            //If the player lost inform them what the correct word was and inform them that they've lost
-            //Either way ask if they want to play again
+            // If the palyer won, fill out the correct guesses fully and congratulate the player
+            // If the player lost inform them what the correct word was and inform them that they've lost
+            // Either way ask if they want to play again
 
             if (playerWon)
             {
@@ -285,37 +282,35 @@ namespace Hangman
 
             Console.WriteLine("\n Do you want to play again? (Y)es/(N)o?");
             char confirmationResponse = '_';
-            while (ConfirmationValidated(Console.ReadLine(), out confirmationResponse) == false) //Keep taking input until user enters a legal confirmation
-            {
-                //User must enter input that begins with a Y or a N (not case sensitive)
+            while (UserConfirmationValidated(Console.ReadLine(), out confirmationResponse) == false)
+            { // Keep taking input until user enters a legal confirmation
+                // User must enter input that begins with a Y or a N (not case sensitive)
             }
 
-            if (confirmationResponse == 'Y')//Start a new game
-            {
+            if (confirmationResponse == 'Y') // Start a new game
+            { 
                 PrepareNewGame();
 
                 Console.WriteLine("New game ready, press any key to begin");
                 Console.ReadKey();
                 PrintGameState();
             }
-            else if (confirmationResponse == 'N')//exit application
-            {
+            else if (confirmationResponse == 'N') // exit application
+            { 
                 shouldRun = false;
             }
-
         }
 
-        private bool ConfirmationValidated(string input, out char confirmation)
+        private bool UserConfirmationValidated(string input, out char confirmation)
         {
-            
-            //if there is no input return false
+            // if there is no input return false
             if (input.Length == 0)
             {
                 confirmation = 'N';
                 return false;
             }
 
-            //Is the first char Y or N?
+            // Is the first char Y or N?
             char charInput = input.ToUpper()[0];
             if (Equals(charInput, 'Y') || Equals(charInput, 'N'))
             {

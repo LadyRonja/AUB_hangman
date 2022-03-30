@@ -102,17 +102,17 @@ namespace Hangman
 
         public static void DrawHangmanedProgress(int guessesLeft)
         {
-            //Lazy protection vs invalid input
-            try
-            {
-                //draw ascii art within the span of 0-10
+            // Improper protection vs invalid input, outputs the last stage of the ascii drawing
+            try {
+                // draw ascii art within the span of 0-10
                 Console.WriteLine(artGallery[guessesLeft]);
             }
-            catch (Exception)
-            {
+            catch (IndexOutOfRangeException error) {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("ERROR IN DRAWING ASCII, PLEASE CONTACT DEVELOPER");
                 Console.ResetColor();
+
+                Console.WriteLine(artGallery[artGallery.Length - 1]);
                 throw;
             }
             
