@@ -147,11 +147,12 @@ namespace Hangman
         private bool LegalGuess(string input, out string validOutput)
         {
             bool noErrorFound = true;
+            string inputGuess = input.ToLower();
 
             // Does input only consist of letters?
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < inputGuess.Length; i++)
             {
-                if (Char.IsLetter(input[i]) == false)
+                if (Char.IsLetter(inputGuess[i]) == false)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Guess must only contain letters");
@@ -164,9 +165,9 @@ namespace Hangman
             }
 
             // Is input either length 1 or the length of the current word?
-            if (input.Length != 1)
+            if (inputGuess.Length != 1)
             {
-                if (input.Length != currentWord.Length)
+                if (inputGuess.Length != currentWord.Length)
                 {
 
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -178,9 +179,9 @@ namespace Hangman
             }
 
             // Has a single letter already been guessed
-            if (input.Length == 1)
+            if (inputGuess.Length == 1)
             {
-                if (guessedLetters.ToString().Contains(input[0]) || correctGuesses.Contains(input[0]))
+                if (guessedLetters.ToString().Contains(inputGuess[0]) || correctGuesses.Contains(inputGuess[0]))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("You've already guessed that letter before");
@@ -190,7 +191,7 @@ namespace Hangman
                 }
             }
 
-            validOutput = (noErrorFound) ? input : "L";
+            validOutput = (noErrorFound) ? inputGuess : "L";
 
             // Debug close program
             if (input == "-1")
