@@ -64,6 +64,9 @@ namespace Hangman
                 currentWord = backupWords[_rand];
             }
 
+            //word should always be all lower case
+            currentWord = currentWord.ToLower();
+
             // Fill the correctGuesses array with underdashes
             correctGuesses = new char[currentWord.Length];
             for (int i = 0; i < correctGuesses.Length; i++) { correctGuesses[i] = '_'; }
